@@ -8,41 +8,22 @@ This project provides an automated solution for detecting and classifying critic
 ```
 HackByte_Dataset/
 │
-├── classes.txt                  # List of class names (FireExtinguisher, ToolBox, OxygenTank)
-├── data/                        # Main dataset folder
-│   ├── separated_dataset/       # One-class separated training/validation data
-│   ├── test/                    # Test images and labels
-│   ├── train/                   # Training images and labels
-│   └── val/                     # Validation images and labels
-│
-├── ENV_SETUP/                   # Environment setup scripts
-│   ├── create_env.bat
-│   ├── install_packages.bat
-│   └── setup_env.bat
-│
-├── runs/                        # YOLO training and detection outputs
-│   └── detect/                  # Model weights, results, confusion matrices
-│
-├── test_images/                 # Example images and ensemble results
-│
-├── FireExtinguisher.yaml        # YOLO data config for FireExtinguisher
-├── OxygenTank.yaml              # YOLO data config for OxygenTank
-├── ToolBox.yaml                 # YOLO data config for ToolBox
-│
-├── train_all_oneclass.py        # Main script: trains one-class YOLOv8 models for each class
-├── train_fireextinguisher.py    # Train only FireExtinguisher model
-├── train_oxygentank.py          # Train only OxygenTank model
-├── train_toolbox.py             # Train only ToolBox model
-├── train.py                     # (Optional) General training script
-├── generate_oneclass_yamls.py   # Script to auto-generate YAMLs for each class
-├── grouping.py                  # Script to separate dataset by class (for one-class training)
-├── predict.py                   # Script to run inference on new images
+├── .git/                        # Git repository folder
+├── README.md                    # Project documentation
+├── push.bat                     # Batch script to push code to GitHub
+├── grouping.py                  # Script to separate dataset by class
 ├── visualize.py                 # Script to visualize predictions
-├── visualizeclass.py            # Script to visualize class-specific predictions
-├── yolo_params.yaml             # YOLO hyperparameters
-├── yolov8s.pt                   # Pretrained YOLOv8s weights
+├── Testing.py                   # (Not previously documented) Likely for testing code or models
+├── train_all_oneclass.py        # Main script: trains one-class YOLOv8 models for each class
+├── generate_oneclass_yamls.py   # Script to auto-generate YAMLs for each class
 ├── yolo11n.pt                   # (Optional) Additional YOLO weights
-└── README.md                    # Project documentation (this file)
+├── runs/                        # YOLO training and detection outputs
+├── yolov8s.pt                   # Pretrained YOLOv8s weights
+├── predict.py                   # Script to run inference on new images
+├── yolo_params.yaml             # YOLO hyperparameters
+├── ENV_SETUP/                   # Environment setup scripts
+├── classes.txt                  # List of class names
+
 ```
 
 ## 🧠 Model & Approach
