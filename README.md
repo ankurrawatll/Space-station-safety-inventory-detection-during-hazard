@@ -35,7 +35,7 @@ This project provides a robust, modular pipeline for detecting and classifying c
 - **predict.py**: Runs inference on new images using any trained model.
 
 ### 6. **Apps & Deployment**
-- **safety-detection-app/**: Full-stack app (backend + frontend) for real-time detection and history.
+- **safety-detection-app/**: Full-stack app (backend + frontend in FastApi and React) for real-time detection and history.
 - **streamlit_app/**: Streamlit-based app for visualization and data collection.
 
 ---
