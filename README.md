@@ -1,33 +1,65 @@
 # Space Station Safety Inventory Detection During Hazard
 
-## 🏆 One-class Models Overall mAP@0.5: 0.9920 (best approch)
-## 🏆 Multi-class Model mAP@0.5: 0.945
+## 🏆 Overall mAP@0.5 (IoU 0.5) for all classes: 0.9920
+
+---
 
 ## 🚀 Project Overview
-This project provides an automated solution for detecting and classifying critical safety equipment—**Fire Extinguisher, ToolBox, and Oxygen Tank**—in industrial or space station environments using YOLOv8 object detection. The pipeline is designed for robust, real-time detection, even on limited hardware (e.g., RTX 3050 4GB VRAM), and is highly modular and scalable.
+This project provides a robust, modular pipeline for detecting and classifying critical safety equipment—**Fire Extinguisher, ToolBox, and Oxygen Tank**—in industrial or space station environments using YOLOv8 object detection. The solution is designed for high accuracy, real-time performance, and easy extensibility.
+
+---
+
+## 📚 Project Journey & Approach
+
+### 1. **Dataset Preparation**
+- **Raw data** is organized into `data/train/`, `data/val/`, and `data/test/` with `images/` and `labels/` subfolders (YOLO format).
+- **Class list** is defined in `classes.txt`.
+- **grouping.py**: Separates dataset by class for one-class training.
+
+### 2. **One-Class Model Training**
+- **train_all_oneclass.py**: Trains a separate YOLOv8 model for each class (FireExtinguisher, ToolBox, OxygenTank) using class-specific data.
+- **generate_oneclass_yamls.py**: Auto-generates YAML config files for each class.
+- **Results** are saved in `runs/detect/<ClassName>/`.
+- **Accuracy**: Achieved very high mAP@0.5 for each class (see below).
+
+### 3. **Multi-Class Model Training**
+- **train_multiclass.py**: Trains a single YOLOv8 model to detect all three classes at once, using the full dataset and a shared YAML config (`yolo_params.yaml`).
+- **Results** are saved in `runs/detect/multiclass/`.
+
+### 4. **Ensemble Evaluation**
+- **ensemble_evaluate.py**: Runs all three one-class models on each test image, combines predictions (with NMS), and evaluates the ensemble mAP@0.5.
+- **calculate_overall_map.py**: Reads the final mAP@0.5 from each one-class model's `results.csv` and computes the mean (overall) mAP@0.5 for reporting.
+
+### 5. **Visualization & Inference**
+- **visualize.py**: Visualizes predictions and results.
+- **predict.py**: Runs inference on new images using any trained model.
+
+### 6. **Apps & Deployment**
+- **safety-detection-app/**: Full-stack app (backend + frontend) for real-time detection and history.
+- **streamlit_app/**: Streamlit-based app for visualization and data collection.
+
+---
 
 ## 📁 Folder & File Structure
 
-```
-
+```plaintext
 HackByte_Dataset/
 │
-├── .git/                        # Git repository folder
 ├── README.md                    # Project documentation
-├── push.bat                     # Batch script to push code to GitHub
-├── grouping.py                  # Script to separate dataset by class
-├── visualize.py                 # Script to visualize predictions
-├── Testing.py                   # Script for testing code or models
-├── train_all_oneclass.py        # Trains one-class YOLOv8 models for each class
-├── train_multiclass.py          # Trains a single YOLOv8 model for all classes
-├── generate_oneclass_yamls.py   # Auto-generates YAMLs for each class
-├── yolo11n.pt                   # (Optional) Additional YOLO weights
-├── yolov8s.pt                   # Pretrained YOLOv8s weights
-├── predict.py                   # Script to run inference on new images
-├── yolo_params.yaml             # YOLO hyperparameters and dataset config
 ├── classes.txt                  # List of class names
+├── yolo_params.yaml             # YOLO hyperparameters and dataset config
 ├── calculate_overall_map.py     # Calculates overall mAP@0.5 score (IoU = 0.5)
 ├── ensemble_evaluate.py         # Ensembles predictions from all models and evaluates mAP
+├── train_multiclass.py          # Trains a single YOLOv8 model for all classes
+├── train_all_oneclass.py        # Trains one-class YOLOv8 models for each class
+├── generate_oneclass_yamls.py   # Auto-generates YAMLs for each class
+├── grouping.py                  # Script to separate dataset by class
+├── visualize.py                 # Script to visualize predictions
+├── predict.py                   # Script to run inference on new images
+├── Testing.py                   # Script for testing code or models
+├── yolo11n.pt                   # (Optional) Additional YOLO weights
+├── yolov8s.pt                   # Pretrained YOLOv8s weights
+├── push.bat                     # Batch script to push code to GitHub
 │
 ├── ENV_SETUP/                   # Environment setup scripts
 │   ├── install_packages.bat
@@ -71,24 +103,21 @@ HackByte_Dataset/
     ├── app.py
     ├── output/
     └── data_collection/
-
 ```
 
-## 🧠 Model & Approach
-- **YOLOv8s** is used for its speed and accuracy, optimized for 4GB VRAM.
-- **One-class-per-model**: Each class (FireExtinguisher, ToolBox, OxygenTank) is trained as a separate model for focused detection.
-- **Custom dataset separation**: `grouping.py` automatically sorts images and labels into class-specific folders, handling multi-class images.
-- **Augmentation**: Conservative use of mosaic, HSV, translation, and scaling to prevent overfitting on small datasets.
-- **Early stopping** and **patience** to avoid overfitting.
-- **Automated YAML generation** for each class with `generate_oneclass_yamls.py`.
+---
 
 ## 📊 Model Accuracy
-- **FireExtinguisher**: mAP@50 = **98.7%**
-- **ToolBox**: mAP@50 = **99.4%**
-- **OxygenTank**: mAP@50 = **99.5%**
+- **FireExtinguisher**: mAP@0.5 = **0.987**
+- **ToolBox**: mAP@0.5 = **0.994**
+- **OxygenTank**: mAP@0.5 = **0.994**
+- **Overall (mean, one-class models)**: **0.9920**
+- **Multi-class model (100 epochs)**: **0.945**
+
+---
 
 ## 🧮 Calculate Overall mAP@0.5 for All Classes
-To compute the overall (mean) mAP@0.5 across all three one-class models, use the provided script:
+To compute the overall (mean) mAP@0.5 across all three one-class models, use:
 
 ```bash
 python calculate_overall_map.py
@@ -96,79 +125,70 @@ python calculate_overall_map.py
 
 This script reads the `results.csv` files from each model's training output (in `runs/detect/FireExtinguisher/`, `runs/detect/ToolBox/`, and `runs/detect/OxygenTank/`), extracts the final mAP@0.5 value for each, and prints the mean mAP@0.5. This is useful for reporting your system's combined performance to judges or in documentation.
 
+---
+
 ## ⚙️ Setup & Installation
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/ankurrawatll/Space-station-safety-inventory-detection-during-hazard-.-.git
-cd HackByte_Dataset
-```
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/ankurrawatll/Space-station-safety-inventory-detection-during-hazard.git
+   cd HackByte_Dataset
+   ```
+2. **Install Python & pip**
+   - Python 3.8+ is recommended.
+3. **Install Requirements**
+   - Use the provided batch scripts in `ENV_SETUP/` or install manually:
+   ```bash
+   pip install ultralytics tqdm opencv-python matplotlib pyyaml torch pandas
+   ```
 
-### 2. Install Python & pip
-- Python 3.8+ is recommended.
-- [Download Python](https://www.python.org/downloads/)
+---
 
-### 3. Install Requirements
-You can use the provided batch scripts or install manually:
+## 🏋️‍♂️ Training & Evaluation
 
-**Using batch script (Windows):**
-```bash
-cd ENV_SETUP
-./install_packages.bat
-```
+- **Train all one-class models:**
+  ```bash
+  python train_all_oneclass.py
+  ```
+- **Train a multi-class model:**
+  ```bash
+  python train_multiclass.py
+  ```
+- **Ensemble evaluation:**
+  ```bash
+  python ensemble_evaluate.py
+  ```
+- **Calculate overall mAP@0.5:**
+  ```bash
+  python calculate_overall_map.py
+  ```
 
-**Or manually with pip:**
-```bash
-pip install ultralytics tqdm opencv-python matplotlib pyyaml torch pandas
-```
+---
 
-## 🏋️‍♂️ Training the Models
+## 🔍 Inference & Visualization
+- **Run inference:**
+  ```bash
+  python predict.py --weights runs/detect/multiclass/weights/best.pt --source data/test/images/001.png
+  ```
+- **Visualize predictions:**
+  ```bash
+  python visualize.py
+  ```
 
-**Train all one-class models:**
-```bash
-python train_all_oneclass.py
-```
-- This will train a separate YOLOv8 model for each class using the data in `data/separated_dataset/`.
-- Weights and results will be saved in `runs/detect/<ClassName>/weights/best.pt`.
+---
 
-**Train a single class:**
-```bash
-python train_fireextinguisher.py
-# or
-python train_oxygentank.py
-# or
-python train_toolbox.py
-```
-
-## 🔍 Testing & Inference
-
-**Run inference on new images:**
-```bash
-python predict.py --weights runs/detect/FireExtinguisher/weights/best.pt --source test_images/1.png
-```
-- Replace the weights and source as needed for other classes or images.
-
-**Visualize predictions:**
-```bash
-python visualize.py
-```
-
-## 🧩 Dataset Preparation
-- To separate your dataset by class for one-class training, run:
-```bash
-python grouping.py
-```
-- This will create `data/separated_dataset_test/` with images and labels sorted by class.
-
-## 🏆 Why This Project is Innovative & Competitive
-- **Automated, scalable dataset handling** for one-class and multi-class scenarios.
+## 🧩 Why This Project is Innovative & Competitive
+- **Automated, scalable dataset handling** for both one-class and multi-class scenarios.
+- **Ensemble evaluation** for best possible mAP@0.5.
 - **Optimized for low-resource hardware** (RTX 3050 4GB VRAM).
 - **High accuracy** with minimal overfitting due to careful augmentation and early stopping.
 - **Modular, well-documented code** for easy extension and deployment.
 - **Ready for real-world deployment** in safety-critical environments.
 
+---
+
 ## 📬 Contact & Contribution
-- For issues or contributions, open an issue or pull request on [GitHub](https://github.com/ankurrawatll/Space-station-safety-inventory-detection-during-hazard-.-).
+- For issues or contributions, open an issue or pull request on [GitHub](https://github.com/ankurrawatll/Space-station-safety-inventory-detection-during-hazard).
 
 ---
 
