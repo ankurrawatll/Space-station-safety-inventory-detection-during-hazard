@@ -1,6 +1,6 @@
 # Space Station Safety Inventory Detection During Hazard
 
-> **🏆 Overall mAP@0.5 (IoU 0.5) for all classes: 0.9920**
+# **🏆 Overall mAP@0.5 (IoU 0.5) for all classes: 0.9920**
 
 ## 🚀 Project Overview
 This project provides an automated solution for detecting and classifying critical safety equipment—**Fire Extinguisher, ToolBox, and Oxygen Tank**—in industrial or space station environments using YOLOv8 object detection. The pipeline is designed for robust, real-time detection, even on limited hardware (e.g., RTX 3050 4GB VRAM), and is highly modular and scalable.
