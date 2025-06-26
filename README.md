@@ -1,11 +1,17 @@
 # Space Station Safety Inventory Detection During Hazard
 
-## 🏆 Overall mAP@0.5 (IoU 0.5) for all classes: 0.9920
+## 🏆 Overall mAP@0.5 (IoU 0.5) for all classes:
+- **Ensemble (one-class models):** 0.9920 (validation), 0.852 (test set)
+- **Multiclass3 (final hackathon model, test set):** 0.852
 
 ---
 
 ## 🚀 Project Overview
 This project provides a robust, modular pipeline for detecting and classifying critical safety equipment—**Fire Extinguisher, ToolBox, and Oxygen Tank**—in industrial or space station environments using YOLOv8 object detection. The solution is designed for high accuracy, real-time performance, and easy extensibility.
+
+**Two main approaches were explored:**
+- **1. Ensemble of Three One-Class Models:** Separate YOLOv8 models for each class, combined for final predictions.
+- **2. Multiclass Model (multiclass3):** A single YOLOv8 model trained to detect all classes at once. **This is the final, official hackathon submission.**
 
 ---
 
@@ -16,19 +22,21 @@ This project provides a robust, modular pipeline for detecting and classifying c
 - **Class list** is defined in `classes.txt`.
 - **grouping.py**: Separates dataset by class for one-class training.
 
-### 2. **One-Class Model Training**
+### 2. **One-Class Model Training (Ensemble Approach)**
 - **train_all_oneclass.py**: Trains a separate YOLOv8 model for each class (FireExtinguisher, ToolBox, OxygenTank) using class-specific data.
 - **generate_oneclass_yamls.py**: Auto-generates YAML config files for each class.
 - **Results** are saved in `runs/detect/<ClassName>/`.
-- **Accuracy**: Achieved very high mAP@0.5 for each class (see below).
+- **Ensemble evaluation**: Predictions from all three models are combined using NMS for final scoring.
 
-### 3. **Multi-Class Model Training**
+### 3. **Multi-Class Model Training (Final Hackathon Model)**
 - **train_multiclass.py**: Trains a single YOLOv8 model to detect all three classes at once, using the full dataset and a shared YAML config (`yolo_params.yaml`).
-- **Results** are saved in `runs/detect/multiclass/`.
+- **Results** are saved in `runs/detect/multiclass3/`.
+- **This multiclass3 model is the official, genuine hackathon submission.**
 
-### 4. **Ensemble Evaluation**
+### 4. **Evaluation & Reporting**
 - **ensemble_evaluate.py**: Runs all three one-class models on each test image, combines predictions (with NMS), and evaluates the ensemble mAP@0.5.
 - **calculate_overall_map.py**: Reads the final mAP@0.5 from each one-class model's `results.csv` and computes the mean (overall) mAP@0.5 for reporting.
+- **predict.py**: Runs inference and validation for the multiclass3 model and reports its mAP@0.5 on the test set.
 
 ### 5. **Visualization & Inference**
 - **visualize.py**: Visualizes predictions and results.
@@ -50,12 +58,14 @@ HackByte_Dataset/
 ├── yolo_params.yaml             # YOLO hyperparameters and dataset config
 ├── calculate_overall_map.py     # Calculates overall mAP@0.5 score (IoU = 0.5)
 ├── ensemble_evaluate.py         # Ensembles predictions from all models and evaluates mAP
+├── ensemble_eval.yaml           # Dataset YAML for ensemble evaluation
 ├── train_multiclass.py          # Trains a single YOLOv8 model for all classes
 ├── train_all_oneclass.py        # Trains one-class YOLOv8 models for each class
+├── train_only.py                # (Empty or custom training script)
 ├── generate_oneclass_yamls.py   # Auto-generates YAMLs for each class
 ├── grouping.py                  # Script to separate dataset by class
 ├── visualize.py                 # Script to visualize predictions
-├── predict.py                   # Script to run inference on new images
+├── predict.py                   # Script to run inference and validation
 ├── Testing.py                   # Script for testing code or models
 ├── yolo11n.pt                   # (Optional) Additional YOLO weights
 ├── yolov8s.pt                   # Pretrained YOLOv8s weights
@@ -69,22 +79,52 @@ HackByte_Dataset/
 ├── data/                        # Dataset root
 │   ├── train/
 │   │   ├── images/
-│   │   └── labels/
+│   │   ├── labels/
+│   │   └── labels.cache
 │   ├── val/
 │   │   ├── images/
-│   │   └── labels/
+│   │   ├── labels/
+│   │   └── labels.cache
 │   └── test/
 │       ├── images/
-│       └── labels/
+│       ├── labels/
+│       └── labels.cache
+│
+├── predictions/                 # Model predictions (images and labels)
+│   ├── images/
+│   └── labels/
+│
+├── ensemble_pred_labels/        # Ensemble model predictions (YOLO label format)
+│   └── *.txt
 │
 ├── runs/                        # YOLO training and detection outputs
 │   └── detect/
 │       ├── FireExtinguisher/
+│       │   └── weights/
+│       │       ├── best.pt
+│       │       └── last.pt
 │       ├── ToolBox/
+│       │   └── weights/
+│       │       ├── best.pt
+│       │       └── last.pt
 │       ├── OxygenTank/
+│       │   └── weights/
+│       │       ├── best.pt
+│       │       └── last.pt
+│       ├── multiclass3/
+│       │   ├── weights/
+│       │   │   ├── best.pt
+│       │   │   └── last.pt
+│       │   ├── results.csv
+│       │   ├── confusion_matrix.png
+│       │   ├── confusion_matrix_normalized.png
+│       │   ├── ...
 │       ├── multiclass/
-│       ├── train/
-│       └── train2/
+│       ├── multiclass2/
+│       ├── val/
+│       ├── val2/
+│       ├── val3/
+│       ├── val4/
 │
 ├── safety-detection-app/        # Full-stack app
 │   ├── backend/
@@ -113,6 +153,36 @@ HackByte_Dataset/
 - **OxygenTank**: mAP@0.5 = **0.994**
 - **Overall (mean, one-class models)**: **0.9920**
 - **Multi-class model (100 epochs)**: **0.945**
+
+---
+
+## 🧑‍🔬 Model Approaches & Final Submission
+
+### 1. **Ensemble of Three One-Class Models**
+- **Description:** Trains a separate YOLOv8 model for each class (FireExtinguisher, ToolBox, OxygenTank) and combines their predictions using NMS for final evaluation.
+- **Test Set mAP@0.5:** **0.852** (ensemble evaluation)
+- **Per-Class mAP@0.5:**
+  - FireExtinguisher: 0.875
+  - ToolBox: 0.838
+  - OxygenTank: 0.843
+- **How to run:**
+  ```bash
+  python ensemble_evaluate.py
+  ```
+
+### 2. **Multiclass Model (multiclass3) [Final Hackathon Submission]**
+- **Description:** Trains a single YOLOv8 model to detect all three classes at once. This is the official model submitted for the hackathon.
+- **Test Set mAP@0.5:** **0.852**
+- **Per-Class mAP@0.5:**
+  - FireExtinguisher: 0.875
+  - ToolBox: 0.838
+  - OxygenTank: 0.843
+- **Model Weights:** `runs/detect/multiclass3/weights/best.pt`
+- **How to run:**
+  ```bash
+  python predict.py
+  ```
+- **Note:** This is the final, genuine model for hackathon evaluation and reporting.
 
 ---
 
