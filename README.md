@@ -25,6 +25,7 @@ HackByte_Dataset/
 ├── yolo_params.yaml             # YOLO hyperparameters
 ├── ENV_SETUP/                   # Environment setup scripts
 ├── classes.txt                  # List of class names
+├── calculate_overall_map.py     # fol calculating map@0.5 score (iou = 0.5 )
 
 ```
 
