@@ -23,6 +23,6 @@ for path, name in zip(RESULT_PATHS, class_names):
 
 if map_scores:
     overall_map = sum(map_scores) / len(map_scores)
-    print(f"\nOverall mAP@0.5 (mean of all classes): {overall_map:.4f}")
+    print(f"\nOverall mAP@0.5 : {overall_map:.4f}")
 else:
     print("No mAP@0.5 scores found. Please check your result.csv files.") 
