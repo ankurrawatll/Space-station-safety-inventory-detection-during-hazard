@@ -1,5 +1,8 @@
 # Space Station Safety Inventory Detection During Hazard
 
+## 🏆 One-class Models Overall mAP@0.5: 0.9920 (best approch)
+## 🏆 Multi-class Model mAP@0.5: 0.945
+
 ## 🚀 Project Overview
 This project provides an automated solution for detecting and classifying critical safety equipment—**Fire Extinguisher, ToolBox, and Oxygen Tank**—in industrial or space station environments using YOLOv8 object detection. The pipeline is designed for robust, real-time detection, even on limited hardware (e.g., RTX 3050 4GB VRAM), and is highly modular and scalable.
 
@@ -23,6 +26,7 @@ HackByte_Dataset/
 ├── yolo_params.yaml             # YOLO hyperparameters
 ├── ENV_SETUP/                   # Environment setup scripts
 ├── classes.txt                  # List of class names
+├── calculate_overall_map.py     # fol calculating map@0.5 score (iou = 0.5 )
 
 ```
 
@@ -38,6 +42,15 @@ HackByte_Dataset/
 - **FireExtinguisher**: mAP@50 = **98.7%**
 - **ToolBox**: mAP@50 = **99.4%**
 - **OxygenTank**: mAP@50 = **99.5%**
+
+## 🧮 Calculate Overall mAP@0.5 for All Classes
+To compute the overall (mean) mAP@0.5 across all three one-class models, use the provided script:
+
+```bash
+python calculate_overall_map.py
+```
+
+This script reads the `results.csv` files from each model's training output (in `runs/detect/FireExtinguisher/`, `runs/detect/ToolBox/`, and `runs/detect/OxygenTank/`), extracts the final mAP@0.5 value for each, and prints the mean mAP@0.5. This is useful for reporting your system's combined performance to judges or in documentation.
 
 ## ⚙️ Setup & Installation
 
