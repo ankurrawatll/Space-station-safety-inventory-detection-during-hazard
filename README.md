@@ -9,6 +9,7 @@ This project provides an automated solution for detecting and classifying critic
 ## 📁 Folder & File Structure
 
 ```
+
 HackByte_Dataset/
 │
 ├── .git/                        # Git repository folder
@@ -16,17 +17,60 @@ HackByte_Dataset/
 ├── push.bat                     # Batch script to push code to GitHub
 ├── grouping.py                  # Script to separate dataset by class
 ├── visualize.py                 # Script to visualize predictions
-├── Testing.py                   # (Not previously documented) Likely for testing code or models
-├── train_all_oneclass.py        # Main script: trains one-class YOLOv8 models for each class
-├── generate_oneclass_yamls.py   # Script to auto-generate YAMLs for each class
+├── Testing.py                   # Script for testing code or models
+├── train_all_oneclass.py        # Trains one-class YOLOv8 models for each class
+├── train_multiclass.py          # Trains a single YOLOv8 model for all classes
+├── generate_oneclass_yamls.py   # Auto-generates YAMLs for each class
 ├── yolo11n.pt                   # (Optional) Additional YOLO weights
-├── runs/                        # YOLO training and detection outputs
 ├── yolov8s.pt                   # Pretrained YOLOv8s weights
 ├── predict.py                   # Script to run inference on new images
-├── yolo_params.yaml             # YOLO hyperparameters
-├── ENV_SETUP/                   # Environment setup scripts
+├── yolo_params.yaml             # YOLO hyperparameters and dataset config
 ├── classes.txt                  # List of class names
-├── calculate_overall_map.py     # fol calculating map@0.5 score (iou = 0.5 )
+├── calculate_overall_map.py     # Calculates overall mAP@0.5 score (IoU = 0.5)
+├── ensemble_evaluate.py         # Ensembles predictions from all models and evaluates mAP
+│
+├── ENV_SETUP/                   # Environment setup scripts
+│   ├── install_packages.bat
+│   ├── setup_env.bat
+│   └── create_env.bat
+│
+├── data/                        # Dataset root
+│   ├── train/
+│   │   ├── images/
+│   │   └── labels/
+│   ├── val/
+│   │   ├── images/
+│   │   └── labels/
+│   └── test/
+│       ├── images/
+│       └── labels/
+│
+├── runs/                        # YOLO training and detection outputs
+│   └── detect/
+│       ├── FireExtinguisher/
+│       ├── ToolBox/
+│       ├── OxygenTank/
+│       ├── multiclass/
+│       ├── train/
+│       └── train2/
+│
+├── safety-detection-app/        # Full-stack app
+│   ├── backend/
+│   │   └── main.py
+│   └── frontend/
+│       ├── index.html
+│       ├── package.json
+│       ├── package-lock.json
+│       ├── postcss.config.cjs
+│       ├── tailwind.config.cjs
+│       ├── src/
+│       ├── dist/
+│       └── node_modules/
+│
+└── streamlit_app/               # Streamlit-based app for visualization or data collection
+    ├── app.py
+    ├── output/
+    └── data_collection/
 
 ```
 
