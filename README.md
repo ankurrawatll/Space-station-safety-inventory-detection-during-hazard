@@ -1,6 +1,6 @@
 # Space Station Safety Inventory Detection During Hazard
 
-## 🏆 One-class Models Overall mAP@0.5: 0.9920
+## 🏆 One-class Models Overall mAP@0.5: 0.9920 (best approch)
 ## 🏆 Multi-class Model mAP@0.5: 0.945
 
 ## 🚀 Project Overview
