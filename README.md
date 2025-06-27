@@ -1,8 +1,10 @@
 # Space Station Safety Inventory Detection During Hazard
 
 ## 🏆 Overall mAP@0.5 (IoU 0.5) for all classes:
+- **Multiclass5 (yolov8m, final hackathon model):** 
+  - **Test Set:** 0.87 (87%) - **FINAL EVALUATION**
+  - **Training Set:** 0.95 (95%) - **TRAINING PERFORMANCE**
 - **Ensemble (one-class models):** 0.9920 (validation), 0.852 (test set)
-- **Multiclass3 (final hackathon model, test set):** 0.852
 
 ---
 
@@ -10,8 +12,8 @@
 This project provides a robust, modular pipeline for detecting and classifying critical safety equipment—**Fire Extinguisher, ToolBox, and Oxygen Tank**—in industrial or space station environments using YOLOv8 object detection. The solution is designed for high accuracy, real-time performance, and easy extensibility.
 
 **Two main approaches were explored:**
-- **1. Ensemble of Three One-Class Models:** Separate YOLOv8 models for each class, combined for final predictions.
-- **2. Multiclass Model (multiclass3):** A single YOLOv8 model trained to detect all classes at once. **This is the final, official hackathon submission.**
+- **1. Multiclass Model (multiclass5):** A single YOLOv8m model trained to detect all classes at once. **This is the final, official hackathon submission with the highest test set performance.**
+- **2. Ensemble of Three One-Class Models:** Separate YOLOv8 models for each class, combined for final predictions.
 
 ---
 
@@ -158,7 +160,23 @@ HackByte_Dataset/
 
 ## 🧑‍🔬 Model Approaches & Final Submission
 
-### 1. **Ensemble of Three One-Class Models**
+### 1. **Multiclass Model (multiclass5) [Final Hackathon Submission - PRIORITY]**
+- **Description:** Trains a single YOLOv8m model to detect all three classes at once. This is the official model submitted for the hackathon with the highest test set performance.
+- **Test Set mAP@0.5:** **0.87 (87%)** - **FINAL EVALUATION RESULT**
+- **Training Set mAP@0.5:** **0.95 (95%)** - **TRAINING PERFORMANCE**
+- **Per-Class mAP@0.5 (Test Set):**
+  - FireExtinguisher: 0.884 (88.4%)
+  - ToolBox: 0.863 (86.3%)
+  - OxygenTank: 0.863 (86.3%)
+- **Model Weights:** `runs/detect/multiclass5/weights/best.pt`
+- **Key Improvement:** +0.018 mAP@0.5 improvement over yolov8s model by using yolov8m
+- **How to run:**
+  ```bash
+  python predict.py
+  ```
+- **Note:** This is the final, genuine model for hackathon evaluation and reporting. Test set results (0.87) represent the true performance on unseen data.
+
+### 2. **Ensemble of Three One-Class Models**
 - **Description:** Trains a separate YOLOv8 model for each class (FireExtinguisher, ToolBox, OxygenTank) and combines their predictions using NMS for final evaluation.
 - **Test Set mAP@0.5:** **0.852** (ensemble evaluation)
 - **Per-Class mAP@0.5:**
@@ -169,20 +187,6 @@ HackByte_Dataset/
   ```bash
   python ensemble_evaluate.py
   ```
-
-### 2. **Multiclass Model (multiclass3) [Final Hackathon Submission]**
-- **Description:** Trains a single YOLOv8 model to detect all three classes at once. This is the official model submitted for the hackathon.
-- **Test Set mAP@0.5:** **0.852**
-- **Per-Class mAP@0.5:**
-  - FireExtinguisher: 0.875
-  - ToolBox: 0.838
-  - OxygenTank: 0.843
-- **Model Weights:** `runs/detect/multiclass3/weights/best.pt`
-- **How to run:**
-  ```bash
-  python predict.py
-  ```
-- **Note:** This is the final, genuine model for hackathon evaluation and reporting.
 
 ---
 
