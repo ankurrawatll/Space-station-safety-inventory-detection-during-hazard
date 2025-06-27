@@ -6,7 +6,7 @@
   - **Training Set:** 0.95 (95%) - **TRAINING PERFORMANCE**
 - **Ensemble (one-class models):** 0.9920 (validation), 0.852 (test set)
 
----
+----
 
 ## 🚀 Project Overview
 This project provides a robust, modular pipeline for detecting and classifying critical safety equipment—**Fire Extinguisher, ToolBox, and Oxygen Tank**—in industrial or space station environments using YOLOv8 object detection. The solution is designed for high accuracy, real-time performance, and easy extensibility.
