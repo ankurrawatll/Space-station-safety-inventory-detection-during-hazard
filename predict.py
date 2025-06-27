@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     # Load the YOLO model
     detect_path = this_dir / "runs" / "detect"
-    train_folders = [f for f in os.listdir(detect_path) if os.path.isdir(detect_path / f) and f.startswith("multiclass3")]
+    train_folders = [f for f in os.listdir(detect_path) if os.path.isdir(detect_path / f) and f.startswith("multiclass5")]
     if len(train_folders) == 0:
         raise ValueError("No training folders found")
     idx = 0

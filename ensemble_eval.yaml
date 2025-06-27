@@ -1,0 +1,7 @@
+
+path: .
+train: data/test/images
+val: data/test/images
+test: data/test/images
+nc: 3
+names: ['FireExtinguisher', 'ToolBox', 'OxygenTank']

@@ -6,10 +6,10 @@ DATA_YAML = "yolo_params.yaml"
 
 # Training configuration (multi-class, tailored for 4GB VRAM)
 TRAIN_ARGS = dict(
-    model="yolov8s.pt",
+    model="yolov8m.pt",
     epochs=200,
     imgsz=640,
-    batch=12,
+    batch=8,
     optimizer="AdamW",
     lr0=0.002,
     lrf=0.0001,
@@ -26,7 +26,7 @@ TRAIN_ARGS = dict(
     mixup=0.1,
     shear=0.0,
     copy_paste=0.1,
-    patience=20,
+    patience=25,
     workers=0,
     device=0,
     single_cls=False  # Multi-class detection
